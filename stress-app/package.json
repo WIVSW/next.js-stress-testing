@@ -1,0 +1,18 @@
+{
+  "name": "stress-app",
+  "type": "module",
+  "scripts": {
+    "start": "npm run stress && http-server -c-1 ./reports/html",
+    "build": "mkdir -p reports/json reports/html reports/ab reports/md",
+    "stress": "./scripts/stress.sh"
+  },
+  "dependencies": {
+    "artillery": "2.0.21",
+    "http-server": "14.1.1",
+    "markdown-table": "3.0.4",
+    "showdown": "2.1.0"
+  },
+  "devDependencies": {
+    "@types/showdown": "2.0.6"
+  }
+}

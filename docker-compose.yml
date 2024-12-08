@@ -1,0 +1,47 @@
+services:
+  next-app:
+    build: ./next-app
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 2gb
+        reservations:
+          cpus: '2'
+          memory: 2gb
+    network_mode: "host"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/next-app-router"]
+
+  react-app:
+    build: ./react-app
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 2gb
+        reservations:
+          cpus: '2'
+          memory: 2gb
+    network_mode: "host"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3019/react"]
+  
+  stress-app:
+    build: ./stress-app
+    depends_on:
+      next-app: 
+        condition: service_healthy
+      react-app: 
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 2gb
+        reservations:
+          cpus: '2'
+          memory: 2gb
+    network_mode: "host"
+    volumes:
+      - ./reports:/app/reports/html

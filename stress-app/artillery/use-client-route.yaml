@@ -1,0 +1,15 @@
+config:
+  http:
+    extendedMetrics: true
+    timeout: 180
+  target: http://localhost:3000
+  phases:
+    - duration: 60
+      arrivalRate: 1
+      rampTo: 100
+scenarios:
+  - flow:
+      - loop:
+          - get:
+              url: "/use-client-route"
+        count: 1

@@ -1,0 +1,15 @@
+config:
+  http:
+    extendedMetrics: true
+    timeout: 180
+  target: http://localhost:3019
+  phases:
+    - duration: 60
+      arrivalRate: 1
+      rampTo: 200
+scenarios:
+  - flow:
+      - loop:
+          - get:
+              url: "/react"
+        count: 1

@@ -1,0 +1,195 @@
+<h1 id="benchmarkresults">Benchmark Results</h1>
+<p>The following page contains benchmark results for server-side rendering of dynamic pages in Next.js 15.0.4.</p>
+<p>The goal of this test is to demonstrate how well the Next.js server can handle a large number of concurrent requests.</p>
+<p>If you wish, you can run this test locally by following the instructions in the <a href="https://github.com/WIVSW/next.js-stress-testing/blob/main/README.md">README.md</a>.</p>
+<h2 id="howthebenchmarkworks">How the Benchmark Works</h2>
+<p>The benchmark sends concurrent requests to several pages.</p>
+<p>Each page renders a <a href="https://github.com/vercel/next.js/blob/canary/bench/rendering/pages/stateless-big.js">list of 10,000 items</a>.</p>
+<p>Each page is rendered dynamically for every incoming request.</p>
+<table>
+<thead>
+<tr>
+<th>Route path</th>
+<th>Served by</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>/next-app-router</td>
+<td>App Router</td>
+<td>Server Component Page</td>
+</tr>
+<tr>
+<td>/next-pages-router</td>
+<td>Pages Router</td>
+<td>Regular Page</td>
+</tr>
+<tr>
+<td>/react</td>
+<td>Custom Server</td>
+<td>Regular <a href="https://react.dev/reference/react-dom/server/renderToPipeableStream#rendering-a-react-tree-as-html-to-a-nodejs-stream">React 19 rendering</a></td>
+</tr>
+<tr>
+<td>/use-client-route</td>
+<td>App Router</td>
+<td>Page with <code>use client</code> on top of it</td>
+</tr>
+</tbody>
+</table>
+<p>I used two different benchmarking tools to generate concurrent requests:</p>
+<ol>
+<li><a href="https://httpd.apache.org/docs/current/programs/ab.html">Apache Benchmark</a></li>
+<li><a href="https://www.artillery.io/docs">Artillery</a></li>
+</ol>
+<p>During the test, the Next.js server was run on Node.js v22 inside a Docker container with 2 CPU cores and 2 GB of RAM.</p>
+<h2 id="apachebenchmarkresults">Apache Benchmark Results</h2>
+<p>During this test, I sent 500 requests in total to each page with a concurrency limit of 50 requests.</p>
+<table>
+<thead>
+<tr>
+<th>Document Path</th>
+<th>/next-app-router</th>
+<th>/next-pages-router</th>
+<th>/react</th>
+<th>/use-client-route</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Document Length</td>
+<td>960702 bytes</td>
+<td>330067 bytes</td>
+<td>328957 bytes</td>
+<td>333192 bytes</td>
+</tr>
+<tr>
+<td>Concurrency Level</td>
+<td>50</td>
+<td>50</td>
+<td>50</td>
+<td>50</td>
+</tr>
+<tr>
+<td>Time taken for tests</td>
+<td>43.977 seconds</td>
+<td>6.965 seconds</td>
+<td>2.632 seconds</td>
+<td>8.993 seconds</td>
+</tr>
+<tr>
+<td>Complete requests</td>
+<td>500</td>
+<td>500</td>
+<td>500</td>
+<td>500</td>
+</tr>
+<tr>
+<td>Failed requests</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Total transferred</td>
+<td>480508000 bytes</td>
+<td>165174500 bytes</td>
+<td>164516000 bytes</td>
+<td>166753000 bytes</td>
+</tr>
+<tr>
+<td>HTML transferred</td>
+<td>480351000 bytes</td>
+<td>165033500 bytes</td>
+<td>164478500 bytes</td>
+<td>166596000 bytes</td>
+</tr>
+<tr>
+<td>Requests per second</td>
+<td>11.37 <a href="mean">#/sec</a></td>
+<td>71.79 <a href="mean">#/sec</a></td>
+<td>189.99 <a href="mean">#/sec</a></td>
+<td>55.60 <a href="mean">#/sec</a></td>
+</tr>
+<tr>
+<td>Time per request</td>
+<td>87.953 [ms] (mean, across all concurrent requests)</td>
+<td>13.930 [ms] (mean, across all concurrent requests)</td>
+<td>5.263 [ms] (mean, across all concurrent requests)</td>
+<td>17.986 [ms] (mean, across all concurrent requests)</td>
+</tr>
+<tr>
+<td>Transfer rate</td>
+<td>10670.36 [Kbytes/sec] received</td>
+<td>23159.24 [Kbytes/sec] received</td>
+<td>61047.68 [Kbytes/sec] received</td>
+<td>18107.84 [Kbytes/sec] received</td>
+</tr>
+<tr>
+<td>Connection time [ms] min</td>
+<td>113</td>
+<td>33</td>
+<td>10</td>
+<td>49</td>
+</tr>
+<tr>
+<td>Connection time [ms] mean</td>
+<td>4192</td>
+<td>658</td>
+<td>250</td>
+<td>854</td>
+</tr>
+<tr>
+<td>Connection time [ms] median</td>
+<td>4398</td>
+<td>683</td>
+<td>253</td>
+<td>872</td>
+</tr>
+<tr>
+<td>Connection time [ms] max</td>
+<td>4620</td>
+<td>768</td>
+<td>312</td>
+<td>1024</td>
+</tr>
+</tbody>
+</table>
+<h2 id="artilleryresults">Artillery Results</h2>
+<p>The Artillery test shows the same results but also includes charts.</p>
+<table>
+<thead>
+<tr>
+<th>Route path</th>
+<th>Sent Requests</th>
+<th>Received Responses</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>/next-app-router</td>
+<td><a href="./next-app-router.html#http-requests-wrapper">link</a></td>
+<td><a href="./next-app-router.html#http-codes-200-wrapper">link</a></td>
+</tr>
+<tr>
+<td>/next-pages-router</td>
+<td><a href="./next-pages-router.html#http-requests-wrapper">link</a></td>
+<td><a href="./next-pages-router.html#http-codes-200-wrapper">link</a></td>
+</tr>
+<tr>
+<td>/react</td>
+<td><a href="./react.html#http-requests-wrapper">link</a></td>
+<td><a href="./react.html#http-codes-200-wrapper">link</a></td>
+</tr>
+<tr>
+<td>/use-client-route</td>
+<td><a href="./use-client-route.html#http-requests-wrapper">link</a></td>
+<td><a href="./use-client-route.html#http-codes-200-wrapper">link</a></td>
+</tr>
+</tbody>
+</table>
+<h2 id="conclusion">Conclusion</h2>
+<p>It appears that pages served by the App Router can handle fewer requests than those served by the Pages Router.</p>
+<p>It is also interesting to note that when we add the <code>use client</code> directive to an App Router page, it can handle more requests per second.</p>
+<p>I believe there is room for improvement.</p>
